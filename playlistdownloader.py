@@ -1,5 +1,6 @@
 from google import search
 import time
+import string
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -7,8 +8,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import youtube_dl
 
+s = "34343"
 SOURCE= "YouTube youtube "
 RESULTS_LOCATOR = "//div/h3/a"
+printable = set(string.printable)
 
 ydl_opts = {'preferredcodec': 'mp3',
             'extractaudio': True,
@@ -20,7 +23,7 @@ driver = webdriver.Chrome('C:/Users/Oriel/Downloads/chromedriver.exe')
 with open('playlist.txt') as f:
     lines = f.readlines()
 for line in lines:
-    query = SOURCE + line[:-1]
+    query = SOURCE + ''.join(filter(lambda x: x in string.printable, line[:-1]))
     print(query)
    # for url in search(query, tld='com', lang='en', start=0, stop=1, num=0):
     print("downloading " + line)
@@ -39,6 +42,9 @@ for line in lines:
             break
         url = item.get_attribute("href")
         print("attempting to download from " + url)
+        if not('youtube' in url):
+            print("url isn't youtube url, skipping")
+            continue
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             try:
                 ydl.download([url])
