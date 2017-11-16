@@ -8,8 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import youtube_dl
 
-s = "34343"
-SOURCE= "YouTube youtube "
+SOURCE= "site:www.youtube.com "
 RESULTS_LOCATOR = "//div/h3/a"
 printable = set(string.printable)
 
